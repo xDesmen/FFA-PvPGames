@@ -1,0 +1,4 @@
+main: cc.pvpgames.ffa.FFAPlugin
+name: PvPGames-Core
+author: Desmen
+version: 0.1
