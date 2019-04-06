@@ -24,13 +24,8 @@ public class Ability implements Listener {
     protected int cooldown;
 
 
-
     public Ability(String id) {
         this.id = id;
-        setup();
-    }
-
-    public void setup() {
         Bukkit.getPluginManager().registerEvents(this, FFAPlugin.getInstance());
     }
 

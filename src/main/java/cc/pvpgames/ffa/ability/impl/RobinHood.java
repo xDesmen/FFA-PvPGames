@@ -5,18 +5,15 @@ import cc.pvpgames.ffa.ability.Ability;
 import cc.pvpgames.ffa.profile.Profile;
 import cc.pvpgames.ffa.utility.Color;
 import cc.pvpgames.ffa.utility.Timer;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 public class RobinHood extends Ability implements Listener {
@@ -47,15 +44,12 @@ public class RobinHood extends Ability implements Listener {
             Player target = (Player) e.getEntity();
 
             Profile profile =  FFAPlugin.getInstance().getProfileManager().getProfile(shooter.getUniqueId());
-
-            if (!profile.getAbility().equals(this))
+            if (profile.getAbility() != null && !profile.getAbility().getId().equalsIgnoreCase(getId()))
                 return;
-
-            if (profile.getAbilityCooldown() != null && !profile.getAbilityCooldown().active())
+            if (!profile.canUseAbility())
                 return;
-
             profile.setAbilityCooldown(new Timer(getCooldown()));
-            target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 4, 1));
+            target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 1));
         }
     }
 

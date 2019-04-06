@@ -53,6 +53,13 @@ public class Profile {
         return ability != null && ability.getId().equalsIgnoreCase(id);
     }
 
+    public boolean canUseAbility() {
+        if (ability == null)
+            return false;
+        if (abilityCooldown == null)
+            return true;
 
+        return !abilityCooldown.active();
+    }
 
 }

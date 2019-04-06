@@ -40,28 +40,22 @@ public class PerkInventory implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-        System.out.println(1);
         if (e.getInventory() == null)
             return;
-        System.out.println(2);
         if (!(e.getWhoClicked() instanceof Player))
             return;
-        System.out.println(3);
         Player player = (Player) e.getWhoClicked();
 
         if (!e.getInventory().getTitle().contains("Select Perk"))
             return;
-        System.out.println(4);
         if (e.getCurrentItem() == null)
             return;
-        System.out.println(5);
         e.setCancelled(true);
 
         ItemStack item = e.getCurrentItem();
 
         if (item.getItemMeta() == null)
             return;
-        System.out.println(item.getItemMeta().getDisplayName());
 
         Perk perk = FFAPlugin.getInstance().getPerkManager().getPerkByName(ChatColor.stripColor(item.getItemMeta().getDisplayName()));
         Profile profile = FFAPlugin.getInstance().getProfileManager().getProfile(player.getUniqueId());
@@ -69,14 +63,11 @@ public class PerkInventory implements Listener {
         if (perk == null)
             return;
 
-        System.out.println(perk.getDisplayName());
 
-        System.out.println(7);
         if (profile.hasPerk(perk)) {
             profile.setPerk(perk);
             player.sendMessage(Color.translate("&eChanged Perk to " + perk.getDisplayName()));
             player.closeInventory();
-            System.out.println(8);
             return;
         }
 
@@ -89,7 +80,6 @@ public class PerkInventory implements Listener {
             } else {
                 player.sendMessage(Color.translate("&cYou do not have enough gold to purchase the perk " + perk.getDisplayName()));
             }
-            System.out.println(10);
         }
 
 

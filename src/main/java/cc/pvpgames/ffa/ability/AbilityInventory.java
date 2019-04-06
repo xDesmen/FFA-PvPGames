@@ -40,43 +40,32 @@ public class AbilityInventory implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-        System.out.println(1);
         if (e.getInventory() == null)
             return;
-        System.out.println(2);
         if (!(e.getWhoClicked() instanceof Player))
             return;
-        System.out.println(3);
         Player player = (Player) e.getWhoClicked();
 
         if (!e.getInventory().getTitle().contains("Select Ability"))
             return;
-        System.out.println(4);
         if (e.getCurrentItem() == null)
             return;
-        System.out.println(5);
         e.setCancelled(true);
 
         ItemStack item = e.getCurrentItem();
 
         if (item.getItemMeta() == null)
             return;
-        System.out.println(item.getItemMeta().getDisplayName());
 
         Ability ability = FFAPlugin.getInstance().getAbilityManager().getAbilityByName(ChatColor.stripColor(item.getItemMeta().getDisplayName()));
         Profile profile = FFAPlugin.getInstance().getProfileManager().getProfile(player.getUniqueId());
 
         if (ability == null)
             return;
-
-        System.out.println(ability.getDisplayName());
-
-        System.out.println(7);
         if (profile.hasAbility(ability)) {
             profile.setAbility(ability);
             player.sendMessage(Color.translate("&eChanged ability to " + ability.getDisplayName()));
             player.closeInventory();
-            System.out.println(8);
             return;
         }
 
@@ -89,7 +78,6 @@ public class AbilityInventory implements Listener {
             } else {
                 player.sendMessage(Color.translate("&cYou do not have enough gold to purchase the ability " + ability.getDisplayName()));
             }
-            System.out.println(10);
         }
 
 

@@ -11,9 +11,11 @@ import java.util.List;
 
 public class Scoreboard implements AssembleAdapter {
 
+    private String TITLE = FFAPlugin.getInstance().getConfig().getString("general.scoreboard-title");
+
     @Override
     public String getTitle(Player player) {
-        return Color.translate(FFAPlugin.getInstance().getConfig().getString("general.scoreboard-title"));
+        return Color.translate(TITLE);
     }
 
     @Override
@@ -26,7 +28,7 @@ public class Scoreboard implements AssembleAdapter {
             lines.add(Color.translate("&6Gold&7: &e" + profile.getGold()));
             lines.add(Color.translate("&5Ability&7: &d" + profile.getActiveAbility()));
             if (profile.getAbilityCooldown() != null && profile.getAbilityCooldown().active())
-                lines.add(Color.translate("&f  > + &7Cooldown: &c" + profile.getAbilityCooldown().getTimeLeft()));
+                lines.add(Color.translate("&f  > &7Cooldown: &c" + (profile.getAbilityCooldown().getTimeLeft() / 1000)));
 
             lines.add(Color.translate("&3Perk&7: &b" + profile.getActivePerk()));
 

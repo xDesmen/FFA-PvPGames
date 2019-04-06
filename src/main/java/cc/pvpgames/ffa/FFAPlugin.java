@@ -1,5 +1,6 @@
 package cc.pvpgames.ffa;
 
+import cc.pvpgames.ffa.ability.Ability;
 import cc.pvpgames.ffa.ability.AbilityInventory;
 import cc.pvpgames.ffa.ability.AbilityManager;
 import cc.pvpgames.ffa.commands.AbilityCommand;
@@ -50,7 +51,9 @@ public class FFAPlugin extends JavaPlugin {
             e.printStackTrace();
         }
         registerCommands(new BukkitCommandManager(this));
-        registerEvents(new PlayerJoinListener(), new PlayerLeaveListener(), new BlockPlaceListener(), new PlayerKillListener(), new PlayerPickupListener(), new AbilityInventory(), new PerkInventory());
+        registerEvents(new PlayerJoinListener(), new PlayerLeaveListener(), new BlockPlaceListener(), new PlayerKillListener(),
+                new PlayerPickupListener(), new AbilityInventory(), new PerkInventory());
+
         setupPermissions();
 
         profileManager.loadOnlineProfiles();
