@@ -1,16 +1,21 @@
 package cc.pvpgames.ffa.perk;
 
 import lombok.Data;
+import org.bukkit.Material;
+
+import java.util.List;
 
 @Data
 public class Perk {
 
-    private String id;
-    private String displayName;
-    private String description;
+    protected String id;
+    protected String displayName;
+    protected String permission;
 
-    private double cost;
+    protected Material display;
 
+    protected int cost;
+    protected List description;
 
     public Perk(String id) {
         this.id = id;

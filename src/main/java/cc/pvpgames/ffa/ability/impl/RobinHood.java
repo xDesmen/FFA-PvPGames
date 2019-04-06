@@ -3,16 +3,21 @@ package cc.pvpgames.ffa.ability.impl;
 import cc.pvpgames.ffa.FFAPlugin;
 import cc.pvpgames.ffa.ability.Ability;
 import cc.pvpgames.ffa.profile.Profile;
+import cc.pvpgames.ffa.utility.Color;
 import cc.pvpgames.ffa.utility.Timer;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class RobinHood extends Ability implements Listener {
 
@@ -25,8 +30,9 @@ public class RobinHood extends Ability implements Listener {
         setCost(350);
         setPermission("ffa.ability.robinhood");
         setCooldown(30);
-        setDescription(Arrays.asList("&7Cost: &a" + getCost(), "&7Shooting a player will give them poison 2 for 4 seconds."));
-        setDisplayName("&aRobin Hood");
+        setDescription(Collections.singletonList("&7Shooting a player will give them poison 2 for 4 seconds."));
+        setDisplayName(Color.translate("&aRobin Hood"));
+        setDisplay(Material.BOW);
     }
 
     @EventHandler

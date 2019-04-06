@@ -13,18 +13,15 @@ public class PlayerLeaveListener implements Listener {
     public void onKick(PlayerKickEvent e) {
         Profile profile = FFAPlugin.getInstance().getProfileManager().getProfile(e.getPlayer().getUniqueId());
 
-        if (profile != null) {
-            FFAPlugin.getInstance().getProfileManager().saveProfile(profile);
-        }
+        FFAPlugin.getInstance().getProfileManager().saveProfile(profile, true);
+
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         Profile profile = FFAPlugin.getInstance().getProfileManager().getProfile(e.getPlayer().getUniqueId());
 
-        if (profile != null) {
-            FFAPlugin.getInstance().getProfileManager().saveProfile(profile);
-        }
+        FFAPlugin.getInstance().getProfileManager().saveProfile(profile, true);
     }
 
 }

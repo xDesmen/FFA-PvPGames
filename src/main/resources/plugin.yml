@@ -2,3 +2,5 @@ main: cc.pvpgames.ffa.FFAPlugin
 name: FFA-PvPGames
 author: Desmen
 version: 0.1
+depend:
+  - Vault

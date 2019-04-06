@@ -1,13 +1,13 @@
 package cc.pvpgames.ffa.ability;
 
 import cc.pvpgames.ffa.FFAPlugin;
-import cc.pvpgames.ffa.ability.impl.RobinHood;
 import lombok.Data;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Data
 public class Ability implements Listener {
@@ -18,20 +18,22 @@ public class Ability implements Listener {
 
     protected List description;
 
-    protected double cost;
+    protected Material display;
+
+    protected int cost;
     protected int cooldown;
 
-    private List<RobinHood> abilities = new ArrayList<>();
+
 
     public Ability(String id) {
         this.id = id;
         setup();
     }
 
-    private void setup() {
-        abilities.add(new RobinHood());
+    public void setup() {
         Bukkit.getPluginManager().registerEvents(this, FFAPlugin.getInstance());
     }
+
 
 
 }

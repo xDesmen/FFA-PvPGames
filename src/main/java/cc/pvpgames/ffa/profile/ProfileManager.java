@@ -1,10 +1,8 @@
 package cc.pvpgames.ffa.profile;
 
 import cc.pvpgames.ffa.FFAPlugin;
-import cc.pvpgames.ffa.utility.Color;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,7 +26,6 @@ public class ProfileManager {
         profiles.put(uuid, profile);
 
         Bukkit.getScheduler().runTaskAsynchronously(FFAPlugin.getInstance(), () -> {
-
             try {
                 Connection connection = FFAPlugin.getInstance().getMySQLManager().hikari.getConnection();
                 PreparedStatement statement = connection.prepareStatement("INSERT INTO users (uuid, gold, kills, deaths) VALUE (?,?,?,?)");
@@ -37,29 +34,49 @@ public class ProfileManager {
                 statement.setInt(3, 0);
                 statement.setInt(4, 0);
                 statement.executeUpdate();
-                profile.getPlayer().sendMessage(Color.translate("&aProfile created."));
+                statement.close();
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
         });
 
     }
 
-    public void saveProfile(Profile profile) {
-        Bukkit.getScheduler().runTaskAsynchronously(FFAPlugin.getInstance(), () -> {
+    public void saveProfile(Profile profile, boolean async) {
+        if (async) {
+            Bukkit.getScheduler().runTaskAsynchronously(FFAPlugin.getInstance(), () -> {
+                try {
 
+                    Connection connection = FFAPlugin.getInstance().getMySQLManager().hikari.getConnection();
+                    PreparedStatement statement = connection.prepareStatement("UPDATE users SET gold=?,kills=?,deaths=? WHERE UUID=?");
+                    statement.setInt(1, profile.getGold());
+                    statement.setInt(2, profile.getKills());
+                    statement.setInt(3, profile.getDeaths());
+                    statement.setString(4, profile.getUuid().toString());
+                    statement.executeUpdate();
+                    statement.close();
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
+        } else {
             try {
                 Connection connection = FFAPlugin.getInstance().getMySQLManager().hikari.getConnection();
                 PreparedStatement statement = connection.prepareStatement("UPDATE users SET gold=?,kills=?,deaths=? WHERE UUID=?");
                 statement.setInt(1, profile.getGold());
                 statement.setInt(2, profile.getKills());
                 statement.setInt(3, profile.getDeaths());
+                statement.setString(4, profile.getUuid().toString());
+                statement.executeUpdate();
+                statement.close();
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
-        });
+        }
     }
 
     public void loadProfile(UUID uuid) {
@@ -68,7 +85,6 @@ public class ProfileManager {
             try {
                 Profile profile = new Profile(uuid);
                 Connection connection = FFAPlugin.getInstance().getMySQLManager().hikari.getConnection();
-
                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE uuid=?");
                 statement.setString(1, uuid.toString());
                 ResultSet results = statement.executeQuery();
@@ -77,10 +93,12 @@ public class ProfileManager {
                     profile.setKills(results.getInt("kills"));
                     profile.setDeaths(results.getInt("deaths"));
                     profile.setGold(results.getInt("gold"));
+                    profiles.put(uuid, profile);
+                    System.out.println("Done Loading");
                 }
-
-                profiles.put(uuid, profile);
-                profile.getPlayer().sendMessage(Color.translate("&aProfile loaded."));
+                statement.close();
+                results.close();
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -89,13 +107,26 @@ public class ProfileManager {
     }
 
     public boolean hasProfile(UUID uuid) throws SQLException {
+        PreparedStatement statement = null;
+        ResultSet users = null;
+        Connection connection = null;
+        try {
+            connection = FFAPlugin.getInstance().getMySQLManager().hikari.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM users WHERE uuid=?");
+            statement.setString(1, uuid.toString());
+            users = statement.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        Connection connection = FFAPlugin.getInstance().getMySQLManager().hikari.getConnection();
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE uuid=?");
-        statement.setString(1, uuid.toString());
-        ResultSet users = statement.executeQuery();
-
-        return users.next();
+        boolean profile = false;
+        if (users != null) {
+            profile = users.next();
+            users.close();
+            statement.close();
+            connection.close();
+        }
+        return users != null && profile;
     }
 
     public void loadOnlineProfiles() {
@@ -116,8 +147,8 @@ public class ProfileManager {
         });
     }
 
-    public void saveOnlineProfiles() {
-        getProfiles().values().forEach(this::saveProfile);
+    public void saveOnlineProfiles(boolean async) {
+        getProfiles().values().forEach(profile -> saveProfile(profile, async));
     }
 
 

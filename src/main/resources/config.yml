@@ -1,0 +1,8 @@
+database:
+  address: "localhost"
+  db-name: "PvPGames"
+  username: "desmen"
+  password: "google"
+
+general:
+  scoreboard-title: "&a&lPvPGames"
